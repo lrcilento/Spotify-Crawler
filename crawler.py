@@ -6,8 +6,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 #####################################
 
-cid='c708d29a15a348bd8997f14abf51c11e'
-secret='5c8a0d87f00a42c5b1ef8739f501e630'
+cid=''
+secret=''
 
 db = mysql.connector.connect(
     host="localhost",

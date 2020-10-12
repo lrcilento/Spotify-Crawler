@@ -16,7 +16,7 @@ db = mysql.connector.connect(
     database="Spotify"
 )
 
-today = 9
+today = 10
 
 month = 'outubro'
 

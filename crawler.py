@@ -5,8 +5,6 @@ import json
 from spotipy.oauth2 import SpotifyClientCredentials
 from credentials import cid, secret
 
-####################################
-
 db = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -21,8 +19,6 @@ month = 'outubro'
 year = 2020
 
 finalYear = 1970
-
-####################################
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=cid, client_secret=secret))
 

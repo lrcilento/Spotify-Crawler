@@ -3,11 +3,9 @@ import pandas as pd
 import mysql.connector
 import json
 from spotipy.oauth2 import SpotifyClientCredentials
+from credentials import cid, secret
 
-#####################################
-
-cid='c708d29a15a348bd8997f14abf51c11e'
-secret='5c8a0d87f00a42c5b1ef8739f501e630'
+####################################
 
 db = mysql.connector.connect(
     host="localhost",
@@ -16,7 +14,7 @@ db = mysql.connector.connect(
     database="Spotify"
 )
 
-today = 10
+today = 11
 
 month = 'outubro'
 

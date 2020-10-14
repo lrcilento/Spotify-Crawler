@@ -60,6 +60,7 @@ if created == True:
     while year >= finalYear:
 
         dup_count = 0
+        unpopular = 0
         dup = None
         artist_name = []
         track_name = []
@@ -150,6 +151,7 @@ if created == True:
             else:
 
                 genre.append([])
+                unpopular = unpopular + 1
         
-        print(str(year) + ' concluído. '+str(200-dup_count)+' músicas registradas. '+str(dup_count)+' duplicidades ignoradas.')
+        print(str(year) + ' concluído. '+str(2000-dup_count)-unpopular+' músicas registradas. '+str(unpopular)+' de baixa popularidade e '+str(dup_count)+' duplicidades ignoradas.')
         year = year - 1

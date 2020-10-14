@@ -153,5 +153,5 @@ if created == True:
                 genre.append([])
                 unpopular = unpopular + 1
         
-        print(str(year) + ' concluído. '+str(2000-dup_count)-unpopular+' músicas registradas. '+str(unpopular)+' de baixa popularidade e '+str(dup_count)+' duplicidades ignoradas.')
+        print(str(year) + ' concluído. '+str(2000-dup_count-unpopular)+' músicas registradas. '+str(unpopular)+' de baixa popularidade e '+str(dup_count)+' duplicidades ignoradas.')
         year = year - 1

@@ -19,7 +19,11 @@ month = date.today().strftime("%B")
 
 year = 2020
 
-finalYear = 1900
+finalYear = 1880
+
+minimumPopularity = 50
+
+created = False
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=cid, client_secret=secret))
 
@@ -41,6 +45,17 @@ try:
     db.commit()
 
     print("Tabela de "+date.today().strftime("%B%d")+" criada. Iniciando requisição.")
+
+    created = True
+
+except mysql.connector.Error as err:
+
+    print("Erro ao criar tabela: {}".format(err))
+    answer = input("Gostaria de prosseguir? (y/N)")
+    if answer == 'y' or answer == 'Y':
+        create = True
+
+if created == True:
 
     while year >= finalYear:
 
@@ -69,10 +84,8 @@ try:
         print("Requisição concluída. Iniciando formatação.")
 
         for i in range(len(artist_id)):
-            track_genre = sp.artist(artist_id=artist_id[i])['genres']
-            genre.append(track_genre)
 
-            if popularity[i] >= 50:
+            if popularity[i] >= minimumPopularity:
 
                 sql = "SELECT track_name, artist_name, popularity FROM {0} WHERE track_name = %s AND artist_name = %s".format(month+str(day))
                 val = (track_name[i], artist_name[i])
@@ -83,6 +96,9 @@ try:
                     dup = cursor.fetchone()
 
                     if dup == None:
+                        
+                        track_genre = sp.artist(artist_id=artist_id[i])['genres']
+                        genre.append(track_genre)
 
                         sql = "INSERT INTO {0} (track_id, track_name, album_name, artist_name, genres, popularity, year) VALUES (%s, %s, %s, %s, %s, %s, %s)".format(month+str(day))
                         val = (track_id[i], track_name[i], album[i], artist_name[i], json.dumps(genre[i]), popularity[i], year)
@@ -100,12 +116,29 @@ try:
                     else:
 
                         if dup[2] < popularity[i]:
+
+                            track_genre = sp.artist(artist_id=artist_id[i])['genres']
+                            genre.append(track_genre)
+
                             print("Duplicidade de maior popularidade encontrada: "+track_name[i]+" de "+artist_name[i]+". Atualizando.")
 
-                            sql = "UPDATE {0} SET (track_id, album_name, genres, popularity, year) VALUES (%s, %s, %s, %s, %s) WHERE track_name = %s AND artist_name = %s".format(month+str(day))
-                            val = (track_id[i], album[i], json.dumps(genre[i]), popularity[i], year, track_name[i], artist_name[i])
+                            sql = "UPDATE {0} SET popularity = %s WHERE track_name = %s AND artist_name = %s".format(month+str(day))
+                            val = (popularity[i], track_name[i], artist_name[i])
+
+                            try:
+
+                                cursor.execute(sql, val)
+
+                                db.commit()
+
+                            except mysql.connector.Error as err:
+
+                                print("Erro ao atualizar registro: {}".format(err))
 
                         else:
+
+                            genre.append([])
+
                             print("Duplicidade de menor ou igual popularidade encontrada: "+track_name[i]+" de "+artist_name[i]+". Ignorando.")
 
                         dup_count = dup_count + 1
@@ -113,10 +146,10 @@ try:
                 except mysql.connector.Error as err:
 
                     print("Erro ao verificar duplicidade: {}".format(err))
+            
+            else:
+
+                genre.append([])
         
         print(str(year) + ' concluído. '+str(200-dup_count)+' músicas registradas. '+str(dup_count)+' duplicidades ignoradas.')
         year = year - 1
-
-except mysql.connector.Error as err:
-
-    print("Erro ao criar tabela: {}".format(err))

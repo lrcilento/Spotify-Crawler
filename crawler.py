@@ -61,6 +61,7 @@ if created == True:
 
         dup_count = 0
         unpopular = 0
+        insert_count = 0
         dup = None
         artist_name = []
         track_name = []
@@ -109,6 +110,8 @@ if created == True:
                             cursor.execute(sql, val)
 
                             db.commit()
+
+                            insert_count = insert_count + 1
 
                         except mysql.connector.Error as err:
 

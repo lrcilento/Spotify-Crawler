@@ -1,5 +1,4 @@
 import spotipy
-import pandas as pd
 import mysql.connector
 import json
 from spotipy.oauth2 import SpotifyClientCredentials

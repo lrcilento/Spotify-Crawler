@@ -75,12 +75,13 @@ if created == True:
         for i in range(0, 1999, 50):
             track_results = sp.search(q='year:{0}'.format(year), type='track', limit=50, offset=i)
             for i, t in enumerate(track_results['tracks']['items']):
-                artist_name.append(t['artists'][0]['name'])
-                track_name.append(t['name'])
-                popularity.append(t['popularity'])
-                album.append(t['album']['name'])
-                track_id.append(t['id'])
-                artist_id.append(t['artists'][0]['id'])
+                if t != None:
+                    artist_name.append(t['artists'][0]['name'])
+                    track_name.append(t['name'])
+                    popularity.append(t['popularity'])
+                    album.append(t['album']['name'])
+                    track_id.append(t['id'])
+                    artist_id.append(t['artists'][0]['id'])
 
         print("Requisição concluída. Iniciando formatação.")
 
